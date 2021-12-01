@@ -207,6 +207,10 @@ class Interpreter(InterpreterABC):
         # Log status
         self._log.out("[interpreter] Environment: " + str(env))
 
+        # Fire up test (increases reliability in specific cases, unknown why)
+        self._log.out("[interpreter] Fire up dummy process")
+        subprocess.call(['wenv', 'python', '-c', 'print("foo")'])
+        
         # Fire up Wine-Python process
         self._proc_winepython = subprocess.Popen(
             ["wenv", "python", "-u"] + self._p["server_cli_params"],
