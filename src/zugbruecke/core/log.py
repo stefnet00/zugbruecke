@@ -86,12 +86,11 @@ class Log(LogABC):
 
         self._up = True
 
-        self._f = None
-        if self._p["log_write"]:
-            self._f = "zb_{ID:s}_{PLATFORM:s}.txt".format(
-                ID=self._id,
-                PLATFORM=self._p["platform"],
-            )
+        # set file name in any case, logging could be activated later   
+        self._f = "zb_{ID:s}_{PLATFORM:s}.txt".format(
+            ID=self._id,
+            PLATFORM=self._p["platform"],
+        )
 
         if rpc_server is not None:
             rpc_server.register_function(self._receive, "transfer_message")
