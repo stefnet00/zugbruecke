@@ -100,14 +100,27 @@ class Env(_Env):
                 # Copy zugbruecke package into wine-python site-packages
                 shutil.copytree(unix_pkg_path, wine_pkg_path)
 
+        import importlib_metadata
+        version = importlib_metadata.version(name)
+
         # Egg path in unix-python site-packages
         unix_egg_path = os.path.abspath(
             os.path.join(unix_pkg_path, "..", f"{name:s}.egg-info")
         )
+        # checking for different possible names (e.g. on openSUSE, CentOS)
+        if not os.path.exists(unix_egg_path):
+            unix_egg_path = os.path.abspath(
+                os.path.join(unix_pkg_path, "..", f"{name:s}-{version:s}.dist-info")
+            )
         # Egg path in wine-python site-packages
         wine_egg_path = os.path.abspath(
             os.path.join(self._path_dict["sitepackages"], f"{name:s}.egg-info")
         )
+        # checking for different possible names (e.g. on openSUSE, CentOS)
+        if not os.path.exists(wine_egg_path):
+            wine_egg_path = os.path.abspath(
+                os.path.join(self._path_dict["sitepackages"], f"{name:s}-{version:s}.dist-info")
+            )
 
         if not self._p["_issues_50_workaround"]:
             # Link zugbruecke egg into wine-python site-packages
