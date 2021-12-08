@@ -210,10 +210,12 @@ class Interpreter(InterpreterABC):
         # Fire up test (increases reliability in specific cases, unknown why)
         self._log.out("[interpreter] Fire up dummy process")
         try:
-            o = subprocess.check_output(['wenv', 'python', '-c', 'import sys; print(sys.version)'])
-            self._log.out("[interpreter] wenv python version: "+o.strip().decode('utf-8'))
+            o = subprocess.getoutput('wenv python -c "import sys; print(sys.version)"')
+            self._log.out("[interpreter] wenv python version: "+o.strip())
         except subprocess.CalledProcessError:
             self._log.out("[interpreter] starting dummy process failed")
+            import sys, traceback
+            traceback.print_exception(*sys.exc_info(), limit = None, file = sys.stderr)
         
         # Fire up Wine-Python process
         self._proc_winepython = subprocess.Popen(
