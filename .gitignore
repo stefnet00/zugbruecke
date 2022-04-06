@@ -103,3 +103,6 @@ env*/
 
 # dev
 todo.md
+
+# eclipse
+.pydevproject
